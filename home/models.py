@@ -41,4 +41,15 @@ class MenuItem(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
+class NutritionalInformation(models.Model):
+    menu_item=models.ForiegnKey(
+        MenuItem,
+        on_delete=models.CASCADE,
+        related='nutrition_info'
+    )
+    calories=models.IntegerField()
+    protien_grams=models.DecimalField(max_digits=5,decimal_places=2)
+    fat_grams=models.DecimalField(max_digits=5,decimal_places=2)
+    def __str__(self):
+        return f"{self.menu_item.name}-{self.calories} kcal"
 
