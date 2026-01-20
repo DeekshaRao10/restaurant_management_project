@@ -1,4 +1,10 @@
+import datetime
 from django.db import models
+class DailySpecialManager(models.Manager):
+    def upcoming(Self):
+        today=datetime.date.today()
+        return self.filter(date__fte=today)
+
 class Restaurant(models.Model):
     name=models.CharField(max_length=255)
     owner_name=models.CharField(max_length=255)
@@ -11,7 +17,7 @@ class Restaurant(models.Model):
         return self.name
 class DailySpecial(models.Model):
     restaurant=models.ForiegnKey(
-        Restaurant,
+        "Restaurant",
         on_delete=models.CASCADE,
         related_name='daily_specials'
     )
