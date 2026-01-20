@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime,time
+import re
 from .models import DailyOperatingHours
 def get_today_operating_hours():
     today=datetime.now().strftime('%A')
@@ -18,3 +19,12 @@ def is_restaurant_open():
         open_time=time(10,0)
         close_time=time(23,0)
     return open_time<=current<=close_time
+def is_valid_phone_number(phone: str) ->bool:
+    if not phone:
+        return False
+    phone =phone.strip()
+    pattern=r'^\+?\d{1,3}?\d(?:[- ]?\d){9,11}$'
+    if not re.match(pattern,phone):
+        return False
+    digits=re.sub(r'\','',phone)
+    return 10<len(digits)<=12
