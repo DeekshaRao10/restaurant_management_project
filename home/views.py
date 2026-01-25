@@ -30,3 +30,14 @@ class MenuCategoryListView(ListAPIView):
         ingredientts=menu_item.ingrediants.all()
         serializer=IngredientSerializer(ingredients,many=True)
         return Response(serializer.dat,status=status.HTTP_200_0K)
+class MenuItemByCategoryView(APIView):
+    def get(Self,request):
+        category=request.query_params.get("category")
+        if not category:
+            return Response(
+                {"error":"category query parameter is requeried"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        items=MenuItem.objects.filter(category__name__iexact=category)
+        serializer=MenuItemSerializer(items,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
