@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.generics import ListAPIView
 from .models import MenuCategory
 from .serializers import MenuCategorySerializer
+from utils.validation_utils import is_valid_email
 
 class MenuItemUpdateViewSet(viewsets.ViewSet):
     permission_classes=[IsAdminUser]
@@ -44,3 +45,8 @@ class MenuItemByCategoryView(APIView):
 class TableDetailView(RetrieveAPIView):
     queryset=Table.objects.all()
     serializer_class=TableSerializer
+
+def my_view(request):
+    email=request.data.get("email")
+    if not is_valid_email(email):
+        return Response({"error":"Invalid email address"},status=status.HtTP_400_BAD_REQUEST)
