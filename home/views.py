@@ -41,3 +41,6 @@ class MenuItemByCategoryView(APIView):
         items=MenuItem.objects.filter(category__name__iexact=category)
         serializer=MenuItemSerializer(items,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+class TableDetailView(RetrieveAPIView):
+    queryset=Table.objects.all()
+    serializer_class=TableSerializer
