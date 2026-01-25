@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.db.models import Count
 class DailySpecialManager(models.Manager):
     def upcoming(Self):
         today=datetime.date.today()
@@ -33,6 +34,13 @@ class DailySpecial(models.Model):
         if specials.exists():
             return specials.order_by('?').first()
         return None
+class MenuItemManager(models.Manager):
+    def get_top_selling_item(Self,num_items=5):
+        return(
+            self.get_queryset()
+            .annotate(times_orederd=Count("orderitem_set"))
+            .order_by("-times_orderd")[:num_items]
+        )
 class MenuItem(models.Model):
     restaurant=models.ForeignKey(
         Restaurant,
@@ -45,6 +53,7 @@ class MenuItem(models.Model):
     is_available=models.BooleanField(default=True)
     is_featured=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
+    objects=MenuItemManager()
     def __str__(self):
         return self.name
 class NutritionalInformation(models.Model):
